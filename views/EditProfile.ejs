@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Profile</title>
+    <link rel="stylesheet" href="/css/editprofile.css">
+</head>
+<body>
+    <div class="navbar">
+        <h1>Edit Profile</h1>
+        <a href="/dashboard">← Back to Dashboard</a>
+    </div>
+
+    <div class="container">
+        <div class="profile-card">
+            <div class="card-header">
+                <h2>Update Your Profile</h2>
+                <p>Change your account information</p>
+            </div>
+
+            <div class="form-container">
+                <div class="success-message" id="successMessage">
+                    Profile updated successfully!
+                </div>
+
+                <div class="error-message" id="errorMessage">
+                    Failed to update profile. Please try again.
+                </div>
+
+                <form id="editProfileForm" enctype="multipart/form-data">
+                    <!-- Profile Picture Upload -->
+                    <div class="profile-image-section">
+                        <img 
+                            src="/images/profile.jpg" 
+                            alt="Profile" 
+                            class="profile-image-preview"
+                            id="profileImagePreview"
+                        >
+                        
+                        <div class="upload-btn-wrapper">
+                            <button type="button" class="upload-btn">Choose Photo</button>
+                            <input 
+                                type="file" 
+                                name="profileImage" 
+                                id="profileImageInput"
+                                accept="image/*"
+                            >
+                        </div>
+                        <div class="file-name" id="fileName">No file chosen</div>
+                    </div>
+
+                    <!-- Name -->
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input 
+                            type="text" 
+                            id="name" 
+                            name="name" 
+                            value="<%= user.name %>"
+                            placeholder="Enter your name"
+                            required
+                        >
+                    </div>
+
+                    <!-- Age -->
+                    <div class="form-group">
+                        <label for="age">Age</label>
+                        <input 
+                            type="number" 
+                            id="age" 
+                            name="age" 
+                            value="<%= user.age %>"
+                            placeholder="Enter your age"
+                            min="1"
+                            max="120"
+                            required
+                        >
+                    </div>
+
+                    <!-- Email -->
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input 
+                            type="email" 
+                            id="email" 
+                            name="email" 
+                            value="<%= user.email %>"
+                            placeholder="Enter your email"
+                            required
+                        >
+                    </div>
+
+                    <!-- Current Password -->
+                    <div class="form-group">
+                        <label for="currentPassword">Current Password</label>
+                        <div class="password-toggle">
+                            <input 
+                                type="password" 
+                                id="currentPassword" 
+                                name="currentPassword" 
+                                placeholder="Enter current password to confirm changes"
+                                required
+                            >
+                            <button type="button" class="toggle-password" onclick="togglePassword('currentPassword')">
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- New Password (Optional) -->
+                    <div class="form-group">
+                        <label for="newPassword">New Password (Optional)</label>
+                        <div class="password-toggle">
+                            <input 
+                                type="password" 
+                                id="newPassword" 
+                                name="newPassword" 
+                                placeholder="Leave blank to keep current password"
+                            >
+                            <button type="button" class="toggle-password" onclick="togglePassword('newPassword')">
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Confirm New Password -->
+                    <div class="form-group">
+                        <label for="confirmPassword">Confirm New Password</label>
+                        <div class="password-toggle">
+                            <input 
+                                type="password" 
+                                id="confirmPassword" 
+                                name="confirmPassword" 
+                                placeholder="Confirm new password"
+                            >
+                            <button type="button" class="toggle-password" onclick="togglePassword('confirmPassword')">
+                                Show
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Form Actions -->
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Save Changes</button>
+                        <button type="button" class="btn btn-secondary" onclick="window.location.href='/dashboard'">
+                            Cancel
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="/scripts/editProfile.js" defer></script>
+</body>
+</html>

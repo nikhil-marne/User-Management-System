@@ -1,7 +1,7 @@
 {
-  "name": "expresswithmongoos",
+  "name": "ums",
   "version": "1.0.0",
-  "description": "",
+  "description": "user management system",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -10,10 +10,11 @@
   "author": "Nikhil Marne",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^17.2.3",
     "ejs": "^3.1.10",
     "express": "^5.2.1",
     "express-session": "^1.18.2",
-    "mongoose": "^9.0.0",
+    "mongoose": "^9.0.1",
     "multer": "^2.0.2"
   }
 }

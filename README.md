@@ -1,187 +1,110 @@
 # User Management System
 
-A simple CRUD (Create, Read, Update, Delete) application built with Express.js,
-MongoDB, and EJS for managing user data.
+A secure and modern user management application built with **Node.js**,
+**Express.js**, **MongoDB**, **Mongoose**, and **EJS**.\
+Features include login, sessions, profile editing, and image upload.
 
-## Features
+## 🚀 Features
 
-- View all users in a table format
-- Update user information
-- Delete users with real-time UI updates
-- MongoDB integration with Mongoose
-- RESTful API endpoints
-- Server-side rendering with EJS
+- User login with session-based authentication\
+- Protected dashboard\
+- Edit profile:
+  - Update name, age, and email\
+  - Update password\
+  - Upload profile picture\
+- Secure session handling\
+- MongoDB integration using Mongoose\
+- Clean folder structure\
+- Fully responsive UI (EJS + CSS)
 
-## Tech Stack
+## 📁 Project Structure
 
-- **Backend**: Node.js, Express.js
-- **Database**: MongoDB with Mongoose ODM
-- **Template Engine**: EJS
-- **Frontend**: Vanilla JavaScript, CSS
+    .
+    ├── Controller/
+    │   ├── editProfile.js
+    │   └── validateUser.js
+    ├── Model/
+    │   ├── connectDB.js
+    │   └── usersDB.js
+    ├── Schema/
+    │   └── userSchema.js
+    ├── middleWare/
+    │   ├── sessionHandler.js
+    │   └── uploadMW.js
+    ├── public/
+    │   ├── css/
+    │   ├── images/
+    │   └── scripts/
+    ├── views/
+    │   ├── home.ejs
+    │   ├── dashboard.ejs
+    │   └── EditProfile.ejs
+    └── index.js
 
-## Project Structure
+## 🛠 Tech Stack
 
-```
-.
-├── Controllers/
-│   └── UserController.js      # User CRUD operations
-├── Models/
-│   ├── connectDB.js           # Database connection
-│   └── Users.js               # User model
-├── Schemas/
-│   └── userSchema.js          # Mongoose schema definition
-├── views/
-│   ├── usersList.ejs          # Users list page
-│   └── updateUser.ejs         # Update user page
-├── public/
-│   ├── css/
-│   │   └── style.css          # Styles
-│   └── scripts/
-│       └── users.js           # Client-side JavaScript
-└── server.js                  # Main application file
-```
+- Backend: Node.js, Express.js\
+- Database: MongoDB + Mongoose\
+- Views: EJS Templates\
+- Authentication: express-session\
+- Image Upload: Multer
 
-## Prerequisites
+## ⚙️ Environment Variables (.env)
 
-- Node.js (v14 or higher)
-- MongoDB (running locally on port 27017)
-- npm or yarn
+    PORT=5800
+    SECRET_KEY=your_session_secret
+    DATABASE_URL=mongodb://localhost:27017/userManagement
 
-## Installation
+## 📦 Installation & Setup
 
-1. Clone the repository:
+    git clone <your-repo-url>
+    cd <project-directory>
+    npm install
+    node index.js
 
-```bash
-git clone <your-repo-url>
-cd <project-directory>
-```
+Visit: http://localhost:5800
 
-2. Install dependencies:
+## 🔐 Authentication Flow
 
-```bash
-npm install
-```
+- POST /login\
+- Protected routes with checkAuth\
+- POST /logout
 
-3. Ensure MongoDB is running on `mongodb://localhost:27017`
+## 🖼 Profile Editing
 
-4. Start the application:
+POST /api/update-profile\
+Supports image upload + updating user info.
 
-```bash
-node server.js
-```
+## 📡 API Endpoints
 
-5. Open your browser and navigate to:
-
-```
-http://localhost:5800
-```
-
-## Dependencies
-
-```json
-{
-  "express": "^4.x.x",
-  "mongoose": "^7.x.x",
-  "ejs": "^3.x.x"
-}
-```
-
-## API Endpoints
-
-| Method | Endpoint           | Description                        |
-| ------ | ------------------ | ---------------------------------- |
-| GET    | `/`                | Display all users                  |
-| GET    | `/update/user/:id` | Show update form for specific user |
-| POST   | `/update/user/:id` | Update user information            |
-| DELETE | `/user/delete/:id` | Delete a user                      |
-
-## Database Schema
-
-```javascript
-{
-  name: String,
-  age: Number,
-  email: String,
-  city: String
-}
-```
-
-## Usage
-
-### Viewing Users
-
-Navigate to the home page to see all users displayed in a table.
-
-### Updating a User
-
-1. Click the 🖋️ icon next to a user
-2. Modify the user information in the form
-3. Click "Update" to save changes
-
-### Deleting a User
-
-Click the ❌ button next to a user to delete them. The user will be removed from
-the UI without a page refresh.
-
-## Features in Detail
-
-### Controllers
-
-The `UserController.js` file contains all database operations:
-
-- `getAllUsers()` - Fetch all users
-- `adduser(userData)` - Create a new user
-- `deleteUserById(userId)` - Delete user by ID
-- `getUserByid(userId)` - Get single user by ID
-- `updateUserById(userId, userData)` - Update user information
-
-### Database Connection
-
-The application uses MongoDB with automatic connection handling and error
-management.
-
-### Client-Side Functionality
-
-The delete operation uses the Fetch API to make asynchronous DELETE requests,
-providing a smooth user experience without page reloads.
-
-## Configuration
-
-To change the port or database URL, modify the constants in `server.js`:
-
-```javascript
-const PORT = 5800; // Change port here
-```
-
-And in `connectDB.js`:
-
-```javascript
-await mongoose.connect("mongodb://localhost:27017/usersList"); // Change DB URL here
-```
-
-## Error Handling
-
-- Invalid MongoDB ObjectIDs are validated before operations
-- Database connection failures exit the process with error code 1
-- Client-side errors are displayed via alerts
-
-## Future Enhancements
-
-- Add user creation functionality
-- Implement pagination for large datasets
-- Add search and filter capabilities
-- Include form validation
-- Add authentication and authorization
-- Environment variable configuration
-
-## License
-
-MIT
-
-## Author
-
-Nikhil Marne
+Method Endpoint Description
 
 ---
 
-**Note**: Make sure MongoDB is running before starting the application.
+GET `/` Login page GET `/dashboard` User dashboard POST `/login` Login POST
+`/logout` Logout GET `/editProfile` Edit profile page POST `/api/update-profile`
+Update profile
+
+## 🗄 Database Schema
+
+    {
+      name: String,
+      age: Number,
+      email: String,
+      password: String,
+      profileImage: String
+    }
+
+## 📌 Default Credentials
+
+    {
+      "name": "Demo User",
+      "age": 22,
+      "email": "demo@example.com",
+      "password": "123"
+    }
+
+## 📜 License
+
+MIT License\
+Created by Nikhil Marne

@@ -1,97 +1,75 @@
+import "dotenv/config";
 import express from "express";
 import path from "node:path";
-import multer from "multer";
+import connectDB from "./Model/connectDB.js";
+import { validateUser } from "./Controller/validateUser.js";
 import session from "express-session";
-import connectDB from "./Models/connectDB.js";
-import {
-  deleteUserById,
-  getAllUsers,
-  getUserByid,
-  updateUserById,
-} from "./Controllers/UserController.js";
+import { checkAuth, createSession } from "./middleWare/sessionHandler.js";
+import editProfile from "./Controller/editProfile.js";
+import { uploadMW } from "./middleWare/uploadMW.js";
 
-// DEFINING CONSTANTS
-const PORT = 5800;
-const BASE_DIR = path.resolve(".");
-const app = express();
-
-// SETTING UP MULTER
-const storageConfig = multer.diskStorage({
-  destination: (req, file, cb) =>
-    cb(null, path.resolve(BASE_DIR, "fileUploads")),
-  filename: (req, file, cb) => cb(null, file.originalname),
-});
-const multerApp = multer({ storage: storageConfig });
-// CONNECTING DATABASE
 await connectDB();
 
-// SETTING UP APP ENVIROMENTS
+const app = express();
+const PORT = process.env.PORT || 5800;
+const SECRET_KEY = process.env.SECRET_KEY;
+const BASE_DIR = path.resolve(".");
+
+app.use(express.static(path.resolve(BASE_DIR, "public")));
 app.set("view engine", "ejs");
-app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static(path.join(BASE_DIR, "public")));
+app.use(express.json());
 app.use(
   session({
-    secret: "pratiksha",
-    resave: false, // resave session
-    rolling: true,
-    cookie: { maxAge: 1000 * 60 * 60 },
+    secret: SECRET_KEY,
+    resave: false,
     saveUninitialized: false,
+    rolling: true,
+    cookie: { maxAge: 24 * 60 * 60 * 1000 },
   })
 );
 
-// APP ROUTE START
-
-// HOMEPAGE, USERSLIST ROUTE
 app.get("/", async (req, res) => {
-  res.render("usersList", { users: await getAllUsers() });
+  res.render("home");
 });
 
-// DELETE USER ROUTE
-app.delete("/user/delete/:id", async (req, res) => {
-  try {
-    const result = await deleteUserById(req.params.id);
-    res.status(200).json(result);
-  } catch (err) {
-    res.status(500).send(err.message);
+app.get("/dashboard", checkAuth, (req, res) => {
+  res.render("dashboard", { user: req.session.user });
+});
+
+app.post("/login", async (req, res) => {
+  const isValid = await validateUser(req.body.email, req.body.password);
+
+  if (isValid.login) {
+    createSession(req, isValid.user);
+    res.sendStatus(200);
+  } else {
+    res.sendStatus(401);
   }
 });
 
-app
-  .route("/update/user/:id")
-  .get(async (req, res) => {
-    res.render("updateUser", { user: await getUserByid(req.params.id) });
-  })
-  .post(async (req, res) => {
-    const result = await updateUserById(req.params.id, req.body);
-    if (result) {
-      res.send("User Update Succussfully ! <a href='/'>Users List</a>");
+app.post("/logout", async (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      res.sendStatus(401);
     } else {
-      res.send(
-        `Update Failed! <a href="/update/user/${req.params.id}">Try Again!</a>`
-      );
+      res.clearCookie("connect.sid").sendStatus(200);
     }
   });
-
-app.get("/file", (req, res) => {
-  res.render("fileForm");
 });
 
-app.post("/file/upload", multerApp.single("file"), (req, res) => {
-  res.send({ message: req.file });
+app.get("/editProfile", checkAuth, (req, res) => {
+  res.render("EditProfile", { user: req.session.user });
 });
 
-app.get("/user/login", (req, res) => {
-  res.render("login");
-});
+app.post(
+  "/api/update-profile",
+  checkAuth,
+  uploadMW.single("profileImage"),
+  async (req, res) => {
+    await editProfile(req);
+    res.sendStatus(200);
+  }
+);
 
-app.post("/user/profile", (req, res) => {
-  res.render("profile");
-  req.session.data = req.body;
-  console.log(req.session.data);
-});
-
-// ADDING LISTENER TO APP
-app.listen(PORT, () => {
-  console.log("ExpressJs Running at http://localhost:" + PORT);
-});
+app.listen(PORT);

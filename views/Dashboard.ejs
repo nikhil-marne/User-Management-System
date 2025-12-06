@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome <%= user.name %></title>
+    <link rel="stylesheet" href="/css/dashboard.css">
+</head>
+<body>
+    <div class="navbar">
+        <h1>Dashboard</h1>
+        <a href="/">← Back to Home</a>
+    </div>
+
+    <div class="container">
+        <div class="dashboard-card">
+            <div class="card-header">
+                <h2>Welcome Back!</h2>
+                <p>Your Profile Dashboard</p>
+            </div>
+
+            <div class="profile-section">
+                <div class="profile-image-container">
+                    <img 
+                        src="<%= user.profileImage || '/images/profile.jpg' %>"
+                        alt="Profile" 
+                        class="profile-image"
+                    >
+                </div>
+
+                <div class="profile-info">
+                    <div class="info-item">
+                        <span class="info-label">Name</span>
+                        <span class="info-value" id="userName"><%= user.name %></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Age</span>
+                        <span class="info-value" id="userAge"><%= user.age %></span>
+                    </div>
+
+                    <div class="info-item">
+                        <span class="info-label">Email</span>
+                        <span class="info-value" id="userEmail"><%= user.email %></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                <button class="btn btn-primary" onclick="editProfile()">Edit Profile</button>
+                <button class="btn btn-secondary" onclick="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function editProfile() {
+            globalThis.location.href = "/editProfile"
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to logout?')) {
+                fetch("/logout", {
+                    method: "POST"
+                })
+                .then(res => {
+                    res.ok ? globalThis.location.href = "/" : alert("Logout Failed!")
+                })
+            }
+        }
+    </script>
+</body>
+</html>
