@@ -68,7 +68,7 @@ app.post(
   uploadMW.single("profileImage"),
   async (req, res) => {
     await editProfile(req);
-    res.sendStatus(200);
+    res.send({ success: true, message: "Profile Updated!" });
   }
 );
 

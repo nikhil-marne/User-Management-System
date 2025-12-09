@@ -59,13 +59,15 @@ document
         body: formData,
       });
 
-      if (response.ok) {
+      const data = await response.json();
+
+      if (data.success) {
         successMsg.style.display = "block";
 
         // Redirect to dashboard after 2 seconds
-        /*         setTimeout(() => {
+        setTimeout(() => {
           globalThis.location.href = "/dashboard";
-        }, 2000); */
+        }, 2000);
       } else {
         errorMsg.textContent = data.message || "Failed to update profile";
         errorMsg.style.display = "block";
