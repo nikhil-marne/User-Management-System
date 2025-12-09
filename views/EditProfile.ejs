@@ -32,7 +32,7 @@
                     <!-- Profile Picture Upload -->
                     <div class="profile-image-section">
                         <img 
-                            src="/images/profile.jpg" 
+                            src="<%= user.profileImage || '/images/profile.jpg'%>" 
                             alt="Profile" 
                             class="profile-image-preview"
                             id="profileImagePreview"
