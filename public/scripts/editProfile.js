@@ -51,7 +51,6 @@ document
 
     // Create FormData for file upload
     const formData = new FormData(this);
-    console.log(formData);
 
     try {
       const response = await fetch("/api/update-profile", {
@@ -78,17 +77,3 @@ document
       errorMsg.style.display = "block";
     }
   });
-
-// Load current user data (replace with actual data fetching)
-window.addEventListener("DOMContentLoaded", function () {
-  // Example: fetch and populate user data
-  // const userData = JSON.parse(localStorage.getItem('user'));
-  // if (userData) {
-  //     document.getElementById('name').value = userData.name;
-  //     document.getElementById('age').value = userData.age;
-  //     document.getElementById('email').value = userData.email;
-  //     if (userData.profileImage) {
-  //         document.getElementById('profileImagePreview').src = userData.profileImage;
-  //     }
-  // }
-});
