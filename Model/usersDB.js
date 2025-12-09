@@ -50,4 +50,4 @@ export async function updateUser(_id, updateData) {
  * * @param {string} _id - The user's MongoDB ObjectId.
  * @returns {Promise<Object|null>} The user document, or null if not found.
  */
-export const getUserById = async (_id) => await User.findOne({ _id });
+export const getUserById = async (_id) => await User.findOne(_id, "-password");
